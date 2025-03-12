@@ -2,7 +2,7 @@
 export default function LoginForm() {
   return (
     <div className="w-full min-h-screen flex items-center justify-center flex-col">
-      <h1 className="text-3xl font-bold text-white">Si, Soy Honepot</h1>
+      <h1 className="text-3xl font-bold text-white">CourageTheHoneypot Login</h1>
       <form
         method="post"
         action="/api/login"

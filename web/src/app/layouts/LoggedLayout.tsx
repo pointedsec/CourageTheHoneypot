@@ -7,7 +7,6 @@ export default function LoggedLayout({ children }: { children: React.ReactNode }
         <>
             <Navbar/>
             <div className="flex flex-col min-h-screen bg-base-100 text-white">
-                <h1>Logged Layout</h1>
                 {children}
             </div>
             <Footer/>

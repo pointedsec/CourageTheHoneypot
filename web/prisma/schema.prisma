@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model comandos {
+  id                Int       @id @default(autoincrement())
+  id_sesion         Int?
+  respuesta_comando String?
+  command           String?
+  timestamp         DateTime?
+  sesion            sesion?   @relation(fields: [id_sesion], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model intentos {
+  id        Int       @id @default(autoincrement())
+  ip        String?
+  username  String?
+  password  String?
+  timestamp DateTime?
+  status    String?
+  id_sesion Int?
+  sesion    sesion?   @relation(fields: [id_sesion], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model sesion {
+  id         Int        @id @default(autoincrement())
+  start_time DateTime?
+  end_time   DateTime?
+  comandos   comandos[]
+  intentos   intentos[]
+}

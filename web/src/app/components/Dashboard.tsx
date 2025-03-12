@@ -12,7 +12,7 @@ export default function Dashboard({
 }) {
     useEffect(() => {
         if (msg === "success") {
-            toast("Bienvenido a Si, Soy Honeypot " + username, {
+            toast("Bienvenido al panel de CourageTheHoneypot " + username, {
                 position: "top-right",
                 theme: "dark",
             });
