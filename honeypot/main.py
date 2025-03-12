@@ -219,7 +219,7 @@ class BasicSshHoneypot(paramiko.ServerInterface):
         self.sesion_id = sesion_id
         self.event = threading.Event()
         # Database connection
-        self.conn = sqlite3.connect(db_filename, check_same_thread=False)
+        self.conn = sqlite3.connect(db_filename, check_same_thread=False,timeout=20)
 
     def check_channel_request(self, kind, chanid):
         logging.info('client called check_channel_request ({}): {}'.format(
