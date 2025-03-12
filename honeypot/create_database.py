@@ -22,9 +22,7 @@ TABLES = {
         CREATE TABLE IF NOT EXISTS sesion (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             start_time TIMESTAMP,
-            end_time TIMESTAMP,
-            id_intento INTEGER,
-            FOREIGN KEY (id_intento) REFERENCES intentos(id)
+            end_time TIMESTAMP
         );
     ''',
     'comandos': '''
