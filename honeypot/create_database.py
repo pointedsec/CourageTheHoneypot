@@ -29,6 +29,7 @@ TABLES = {
         CREATE TABLE IF NOT EXISTS comandos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             id_sesion INTEGER,
+            respuesta_comando VARCHAR(500),
             command TEXT,
             timestamp TIMESTAMP,
             FOREIGN KEY (id_sesion) REFERENCES sesion(id)

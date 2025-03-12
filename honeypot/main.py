@@ -19,6 +19,7 @@ import os
 import textwrap
 import time
 import re
+import base64
 from groq import Groq
 
 GROQ_API_KEY = "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" # Free! Create one in https://console.groq.com/keys
@@ -178,25 +179,33 @@ def generate_groq_response(cmd):
     logging.info('Response from honeypot: {}'.format(chat_completion.choices[0].message.content))
     return chat_completion.choices[0].message.content
 
-def handle_cmd(cmd, chan, ip, using_groq):
-
+def handle_cmd(cmd, chan, ip, using_groq, command_id, sesion_id, conn):
+    final_response = ""
     if not using_groq:
         response = ""
         if cmd.startswith("ls"):
             response = "users.txt"
+            final_response = response
         elif cmd.startswith("pwd"):
             response = "/home/root"
-
+            final_response = response
         if response != '':
             logging.info('Response from honeypot ({}): '.format(ip, response))
             response = response + "\r\n"
+            final_response = response
         chan.send(response)
     else:
         response = generate_groq_response(cmd)
         response = clean_response(response) + "\r\n"
+        final_response = response
         for line in response.splitlines():
             chan.send(line + "\r\n")  # Send line by line so the tabs and spaces don't f*ck with the output
             time.sleep(0.01)  # Little pause to send the response ordered line by line
+    
+    # Encode the final command response into base64 to insert it in the database
+    final_response_bs64 = base64.b64encode(final_response.encode("ascii")).decode("ascii")
+    # Insert the command response to the database
+    conn.execute("UPDATE comandos SET respuesta_comando = ? WHERE id = ? AND id_sesion = ?", (final_response_bs64, command_id, sesion_id))
 
 class BasicSshHoneypot(paramiko.ServerInterface):
 
@@ -341,6 +350,8 @@ def handle_connection(client, addr, use_groq):
                     (command, sesion_id)
                 )
                 conn.commit()
+                command_id = conn.execute("SELECT last_insert_rowid() FROM comandos").fetchone()[0]
+
 
                 if command == "exit":
                     logging.info("Connection closed (via exit command): " + client_ip + "\n")
@@ -350,7 +361,7 @@ def handle_connection(client, addr, use_groq):
                     conn.commit()
                     conn.close()
                 else:
-                    handle_cmd(command, chan, client_ip, use_groq)
+                    handle_cmd(command, chan, client_ip, use_groq, command_id, sesion_id, conn)
 
         except Exception as err:
             print('!!! Exception: {}: {}'.format(err.__class__, err))
