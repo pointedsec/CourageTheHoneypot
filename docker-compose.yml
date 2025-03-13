@@ -26,7 +26,6 @@ services:
       ADMIN_PASSWORD_SALT: "super_secret_salt"
     ports:
       - "3000:3000"
-      - "5555:5555"
 
 volumes:
   ssh_honeypot_data:
