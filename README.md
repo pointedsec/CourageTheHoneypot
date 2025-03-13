@@ -66,6 +66,66 @@ Usa las siguientes credenciales por defecto:
 docker-compose down  # Detiene y elimina los contenedores  
 docker-compose up -d  # Vuelve a iniciarlo en segundo plano  
 ```
+## 🔑 Cambio de contraseña
+
+La contraseña por defecto para acceder al panel es **admin:admin**. Se recomienda cambiarla lo antes posible. Sigue estos pasos para actualizar la contraseña:
+
+### 1️⃣ Generar un nuevo hash
+
+Para generar un nuevo hash, usa `curl`:
+
+**POST /api/generateNewHash**
+
+
+Con los parámetros:
+
+```json
+{
+  "pwd": "tu_nueva_contraseña",
+  "salt": "un_salt_personalizado"
+}
+```
+
+Ejemplo con `curl`
+```bash
+curl -X POST http://localhost:3000/api/generateNewHash --cookie "session=CookieSesión" -d '{"pwd": "admin", "salt": "super_secret_salt"}' -H 'Content-Type: application/json'
+```
+
+O también puedes iniciar sesión con las credenciales por defecto `admin:admin` y ir a `/changePassword` para generar el hash mediante interfaz gráfica.
+
+Esto devolverá un hash que debes usar en el siguiente paso.
+
+### 2️⃣ Actualizar el archivo .env
+
+Edita el archivo .env en el directorio **web** y cambia el valor de la variable ADMIN_HASH con el hash generado:
+
+ADMIN_PASSWORD="el_hash_generado"
+
+También actualiza el salt utilizado para generar la contraseña
+ADMIN_PASSWORD_SALT="el_salt_utilizado"
+
+### 3️⃣ (Opcional) Actualizar en `docker-compose.yml`
+
+Si usas Docker (es lo suyo), puedes establecer la nueva contraseña directamente en `docker-compose.yml`:
+
+```yml
+environment:
+  - ADMIN_PASSWORD="el_hash_generado"
+  - ADMIN_PASSWORD_SALT="el_salt_utilizado"
+```
+
+### 4️⃣ Reiniciar el servicio
+
+Si has cambiado el `docker-compose.yml`, reinicia los contenedores:
+
+```bash
+docker-compose down
+docker-compose up -d --build
+```
+
+Si has cambiado el `.env` ya que no usas docker, simplemente reinicia el servidor.
+
+Después de estos pasos, la nueva contraseña estará en funcionamiento. 🚀
 
 # ⚠️ Problema con Conexiones Simultáneas
 

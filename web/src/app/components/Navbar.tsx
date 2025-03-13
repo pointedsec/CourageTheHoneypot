@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { useEffect, useState, useCallback } from "react";
 import NotificationModal from "./NotificationModal";
+import { useRouter } from "next/navigation";
+import { FaSignOutAlt } from 'react-icons/fa';
 
 const Navbar = () => {
   const [totalSessions, setTotalSessions] = useState(0);
   const [newSessions, setNewSessions] = useState(0);
   const [unseenSessions, setUnseenSessions] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
 
   const fetchSessions = useCallback(async () => {
     const res = await fetch("/api/getTotalSessions");
@@ -40,9 +43,14 @@ const Navbar = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" />
             </svg>
           </button>
-          <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow text-white">
+          <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow text-white flex flex-col gap-2">
             <li><Link href="/dashboard">Dashboard</Link></li>
             <li><Link href="/sessions">Sesiones</Link></li>
+            <li><Link href="/changePassword">Cambiar contraseña</Link></li>
+            <li><button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center" onClick={() => router.push('/api/logout')}>
+               <FaSignOutAlt className="mr-2"/>
+              <span>Cerrar sesión</span>
+            </button></li>
           </ul>
         </div>
       </div>

@@ -35,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       await session.save()
       res.status(303).redirect('/dashboard?msg=success')
     } else {
-      res.status(401).json({ message: 'Credenciales incorrectas' })
+      res.status(401).redirect('/login?msg=error')
     }
   }
 }

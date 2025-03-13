@@ -1,10 +1,13 @@
 'use client';
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function LoginForm() {
   return (
     <div className="w-full min-h-screen flex items-center justify-center flex-col">
-      <Image src={`/logo.png`} alt='CourageTheHoneypot logo' width={200} height={200}/>
+      <Link href="/login">
+        <Image src={`/logo.png`} alt='CourageTheHoneypot logo' width={200} height={200} />
+      </Link>
       <form
         method="post"
         action="/api/login"
@@ -29,25 +32,25 @@ export default function LoginForm() {
         </button>
       </form>
       <p className="text-white mt-4 text-sm cursor-pointer underline"
-          // @ts-ignore
-          onClick={() => document.getElementById("passwordModal").showModal()}
-        >
-          ¿Olvidaste tu contraseña?
-        </p>
-        <dialog id="passwordModal" className="modal">
-          <div className="modal-box text-white">
-            <h3 className="font-bold text-lg">Como reestablecer la contraseña</h3>
-            <p className="py-4 text-slate-300">
-              Solo el administrador puede reestablecer la contraseña.
-            </p>
-            <div className="modal-action">
-              <form method="dialog">
-                {/* if there is a button in form, it will close the modal */}
-                <button className="btn">Cerrar</button>
-              </form>
-            </div>
+        // @ts-ignore
+        onClick={() => document.getElementById("passwordModal").showModal()}
+      >
+        ¿Olvidaste tu contraseña?
+      </p>
+      <dialog id="passwordModal" className="modal">
+        <div className="modal-box text-white">
+          <h3 className="font-bold text-lg">Como reestablecer la contraseña</h3>
+          <p className="py-4 text-slate-300">
+            Solo el administrador puede reestablecer la contraseña.
+          </p>
+          <div className="modal-action">
+            <form method="dialog">
+              {/* if there is a button in form, it will close the modal */}
+              <button className="btn">Cerrar</button>
+            </form>
           </div>
-        </dialog>
+        </div>
+      </dialog>
     </div>
   );
 }
