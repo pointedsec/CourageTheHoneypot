@@ -5,6 +5,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import ToastProvider from "./components/ToastContainer";
+import { Suspense } from "react";
 export const metadata: Metadata = {
   title: "CourageTheHoneypot Web Interface",
   description: "Created by pointedsec with 🧡",
@@ -22,7 +23,9 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body>
-        <ToastProvider>{children}</ToastProvider>
+        <Suspense>
+          <ToastProvider>{children}</ToastProvider>
+        </Suspense>
       </body>
     </html>
   );
