@@ -99,10 +99,14 @@ Esto devolverá un hash que debes usar en el siguiente paso.
 
 Edita el archivo .env en el directorio **web** y cambia el valor de la variable ADMIN_HASH con el hash generado:
 
+```
 ADMIN_PASSWORD="el_hash_generado"
+```
 
 También actualiza el salt utilizado para generar la contraseña
+```
 ADMIN_PASSWORD_SALT="el_salt_utilizado"
+```
 
 ### 3️⃣ (Opcional) Actualizar en `docker-compose.yml`
 
