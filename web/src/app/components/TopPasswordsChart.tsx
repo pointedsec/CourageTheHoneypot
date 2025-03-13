@@ -2,7 +2,7 @@ import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recha
 
 const COLORS = ["#FF6384", "#36A2EB", "#FFCE56", "#4CAF50", "#FF9800"];
 
-export default function TopPasswordsChart({ topPasswords }) {
+export default function TopPasswordsChart({ topPasswords }: { topPasswords: any }) {
   return (
     <div className="bg-gray-800 p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold text-red-400 mb-4">🔑 Top Contraseñas Más Usadas</h2>
@@ -18,7 +18,7 @@ export default function TopPasswordsChart({ topPasswords }) {
             fill="#8884d8" 
             label
           >
-            {topPasswords.map((_, index) => (
+            {topPasswords.map((_: any, index: number) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>

@@ -1,6 +1,6 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
-export default function AttemptsByIPChart({ attemptsByIP }) {
+export default function AttemptsByIPChart({ attemptsByIP }: { attemptsByIP: any }) {
   return (
     <div className="bg-gray-800 p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold text-blue-400 mb-4">🌍 Intentos por IP</h2>

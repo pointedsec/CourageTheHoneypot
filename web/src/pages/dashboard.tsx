@@ -150,12 +150,12 @@ export default function Dashboard({ totalAttempts, activeSessions, totalCommands
                                 </tr>
                             </thead>
                             <tbody>
-                                {latestAttempts.map((attempt, index) => (
+                                {latestAttempts.map((attempt: any, index: any) => (
                                     <tr key={index} className="hover:bg-gray-700">
                                         <td className="text-white">{attempt.ip}</td>
                                         <td className="text-white">{attempt.username}</td>
                                         <td className="text-white">{attempt.password}</td>
-                                        <td className="text-gray-400">{new Date(attempt.timestamp).toLocaleString()}</td>
+                                        <td className="text-gray-400" suppressHydrationWarning>{new Date(attempt.timestamp).toLocaleString()}</td>
                                     </tr>
                                 ))}
                             </tbody>

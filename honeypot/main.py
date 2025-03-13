@@ -22,7 +22,8 @@ import re
 import base64
 from groq import Groq
 
-GROQ_API_KEY = "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" # Free! Create one in https://console.groq.com/keys
+#GROQ_API_KEY = "Put here your GROQ API Key if using manual deployment and comment the next line" # Free! Create one in https://console.groq.com/keys
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 HOST_KEY = paramiko.RSAKey(filename='server.key')
 SSH_BANNER = "SSH-2.0-OpenSSH_8.2p1 Ubuntu-4ubuntu0.1"
 LOGGING_ATTEMPTS = 2 # Logging attempts that will be denied (the third one will be valid)
@@ -421,5 +422,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
     if (not args.stupid_dog):
         print(COURAGE_BANNER)
+    if args.use_groq and not GROQ_API_KEY:
+        print("Error: GROQ_API_KEY is not set. Please set it in the environment variables.")
+        sys.exit(1)
     check_database()
     start_server(args.port, args.bind, args.use_groq)

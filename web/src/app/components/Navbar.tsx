@@ -1,59 +1,72 @@
 import Link from "next/link";
-import { useState } from "react";
-import { FiMenu, FiX } from "react-icons/fi"; // Íconos para menú móvil
+import { useEffect, useState, useCallback } from "react";
+import NotificationModal from "./NotificationModal";
 
-export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+const Navbar = () => {
+  const [totalSessions, setTotalSessions] = useState(0);
+  const [newSessions, setNewSessions] = useState(0);
+  const [unseenSessions, setUnseenSessions] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const fetchSessions = useCallback(async () => {
+    const res = await fetch("/api/getTotalSessions");
+    const data = await res.json();
+    const currentTotal = data.totalSessions;
+
+    const storedTotal = Number(localStorage.getItem("storedTotalSessions")) || currentTotal;
+    const difference = Math.max(0, currentTotal - storedTotal);
+
+    setNewSessions(difference);
+    setUnseenSessions(difference); // Se muestra en el badge hasta que se abra el modal.
+    setTotalSessions(currentTotal);
+  }, []);
+
+  useEffect(() => {
+    fetchSessions();
+  }, [fetchSessions]);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+    setUnseenSessions(0); // Cuando se abre el modal, eliminamos las notificaciones visibles.
+    localStorage.setItem("storedTotalSessions", totalSessions.toString()); // Guardamos el nuevo total.
+  };
 
   return (
-    <div className="sticky top-0 z-50 bg-base-100 shadow-lg">
-      <div className="navbar">
-        {/* Logo */}
-        <div className="flex-1">
-          <Link href="/" className="btn btn-ghost normal-case text-xl text-white">
-            CourageTheHoneypot
-          </Link>
-        </div>
-
-        {/* Menú Desktop */}
-        <div className="hidden md:flex">
-          <ul className="menu menu-horizontal px-1 flex items-center justify-center gap-4">
-            <li><Link href="/dashboard">Dashboard</Link></li>
-            <li><Link href="/sessions">Sesiones SSH</Link></li>
-            <li><Link href="/commands">Comandos</Link></li>
-            <li><Link href="/attempts">Intentos</Link></li>
-            <li>
-              <button className="btn text-white btn-error" onClick={() => window.location.href = "/api/logout"}>
-                Cerrar sesión
-              </button>
-            </li>
-          </ul>
-        </div>
-
-        {/* Botón menú hamburguesa (móvil) */}
-        <div className="md:hidden">
-          <button className="btn btn-ghost" onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+    <div className="navbar bg-base-100 shadow-sm">
+      <div className="navbar-start">
+        <div className="dropdown">
+          <button tabIndex={0} className="btn btn-ghost btn-circle text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" />
+            </svg>
           </button>
+          <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow text-white">
+            <li><Link href="/dashboard">Dashboard</Link></li>
+            <li><Link href="/sessions">Sesiones</Link></li>
+          </ul>
         </div>
       </div>
 
-      {/* Menú desplegable en móvil */}
-      {isOpen && (
-        <div className="md:hidden bg-base-200 p-4">
-          <ul className="menu flex flex-col gap-4">
-            <li><Link href="/dashboard" onClick={() => setIsOpen(false)}>Dashboard</Link></li>
-            <li><Link href="/sessions" onClick={() => setIsOpen(false)}>Sesiones SSH</Link></li>
-            <li><Link href="/commands" onClick={() => setIsOpen(false)}>Comandos</Link></li>
-            <li><Link href="/attempts" onClick={() => setIsOpen(false)}>Intentos</Link></li>
-            <li>
-              <button className="btn text-white btn-error w-full" onClick={() => window.location.href = "/api/logout"}>
-                Cerrar sesión
-              </button>
-            </li>
-          </ul>
-        </div>
-      )}
+      <div className="navbar-center">
+        <Link href="/dashboard" className="btn btn-ghost text-xl text-white">
+          CourageTheHoneypot Web Panel
+        </Link>
+      </div>
+
+      <div className="navbar-end">
+        <button className="btn btn-ghost btn-circle text-white" onClick={handleOpenModal}>
+          <div className="indicator text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+            {unseenSessions > 0 && <span className="badge badge-xs badge-primary indicator-item">{unseenSessions}</span>}
+          </div>
+        </button>
+      </div>
+
+      {isModalOpen && <NotificationModal newSessions={newSessions} onClose={() => setIsModalOpen(false)} />}
     </div>
   );
-}
+};
+
+export default Navbar;

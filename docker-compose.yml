@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  honeypot:
+    build: ./honeypot
+    environment:
+        GROQ_API_KEY: "YOUR_GROQ_API_KEY"
+        USE_GROQ: false
+    container_name: honeypot
+    volumes:
+      - ssh_honeypot_data:/app
+    ports:
+      - "2222:2222"  # Exponiendo el puerto SSH para atraer atacantes
+
+  frontend:
+    build: ./web
+    container_name: frontend
+    depends_on:
+      - honeypot
+    volumes:
+      - ssh_honeypot_data:/app/honeypot
+    environment:
+      SESSION_SECRET: "17D7F1B795368471A7C6B75497315512"
+      ADMIN_USERNAME: "admin"
+      ADMIN_PASSWORD: "f7ec910e206861d603198695f0bf3d83"
+      ADMIN_PASSWORD_SALT: "super_secret_salt"
+    ports:
+      - "3000:3000"
+      - "5555:5555"
+
+volumes:
+  ssh_honeypot_data:

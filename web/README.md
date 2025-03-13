@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🐶🛡️ Courage The Honeypot (solo next.js, eres un poco raro)
 
-## Getting Started
+Este proyecto es el frontend de Courage The Honeypot desarrollado en Next.js, utilizando Prisma para el manejo de la base de datos y el analisis de intentos.
 
-First, run the development server:
+## 📻 Instalación y Uso
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### 1️⃣ Requisitos
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Node.js
+- Prisma
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 2️⃣ Instalación Manual (sin Docker)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Clona el repositorio y accede al directorio del frontend:
 
-## Learn More
+   ```bash
+   git clone https://github.com/pointedsec/CourageTheHoneypot.git
+   cd CourageTheHoneypot/web
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. Instala las dependencias:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   npm install --force
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. Crea el archivo de entorno (.env):
 
-## Deploy on Vercel
+   ```bash
+   touch .env
+   ```
+4. Agrega las variables de entorno necesarias:
+    ```
+    SESSION_SECRET=17D7F1B795368471A7C6B75497315512 (ejemplo)
+    ADMIN_USERNAME=admin
+    ADMIN_PASSWORD=f7ec910e206861d603198695f0bf3d83 (admin)
+    ADMIN_PASSWORD_SALT=super_secret_salt (salt para la contraseña, si se cambia el hash de arriba no será válido)
+    DATABASE_URL="file:/home/andres/Desktop/Proyectos/CourageTheHoneypot/honeypot/ssh_honeypot.db" (Ruta de la base de datos generada por **create_database.py**)
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+5. Configurar Prisma y generar el cliente:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   npx prisma db pull
+   npx prisma generate
+   ```
+
+5. Inicia el servidor (en modo desarrollo, puedes hacer un build si quieres):
+
+   ```bash
+   npm run dev
+   ```
+
+## 🔍 Registro de Datos
+
+- **Usuarios y contraseñas:** Usuario y contraseña ingresados por el atacante.
+- **Sesiones activas:** Inicio y fin de sesión de cada atacante.
+- **Comandos ejecutados:** Cada comando ingresado es registrado en la base de datos.
+
+## ⚠️ Advertencia
+
+Este honeypot no debe usarse en entornos de producción sin medidas de seguridad adicionales. Se recomienda ejecutarlo en una máquina aislada y revisar la legalidad de su uso en tu país.
