@@ -45,6 +45,8 @@ Una vez en ejecución, abre en tu navegador:
 http://localhost:3000
 ```
 
+También el Honeypot estára en escucha por el puerto 2222 (puedes cambiar el archivo de configuración `Dockerfile` del honeypot y poner el puerto 22, también asegurate de cambiar el archivo `docker-compose.yml` para exponer el puerto deseado si lo cambias) de conexiones SSH. Por defecto este aceptará cualquier conexión al tercer intento de autenticación.
+
 # 🚀 Tutorial de Uso
 ## 1️⃣ Acceder al Panel
 
