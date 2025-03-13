@@ -27,7 +27,7 @@ git clone https://github.com/pointedsec/CourageTheHoneypot.git
 cd CourageTheHoneypot
 ```
 
-Cambia las variables de entorno necesarias en el archivo `docker-compose.yml`
+Cambia las variables de entorno necesarias en el archivo `docker-compose.yml` si quieres usar Groq en el Honeypot para generar respuestas con la IA.
 
 ### 2️⃣ Construcción y Ejecución con Docker
 
